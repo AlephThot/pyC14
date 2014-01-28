@@ -47,9 +47,9 @@ if __name__ == "__main__":
     for (name, date, error) in example_data:
         (oxcal_output_log, oxcal_output_js) = calibrate_single(date, error, name)
         (myOCD, myCalib) = parse_OxCal_data(oxcal_output_js)
-        fname = "blv/gd/blv_{name}_{date}-{error}_gd.png".format(name=name, date=date, error=error)
+        fname = "output/gd/test_{name}_{date}-{error}_gd.png".format(name=name, date=date, error=error)
         plot_single_expend(myOCD[2], myCalib[0], fname)
-        fname = "blv/ptt/blv_{name}_{date}-{error}_ptt.png".format(name=name, date=date, error=error)
+        fname = "output/ptt/test_{name}_{date}-{error}_ptt.png".format(name=name, date=date, error=error)
         plot_single_simple(myOCD[2], myCalib[0], fname)
-        fname = "blv/prob/blv_{name}_{date}-{error}_prob.png".format(name=name, date=date, error=error)
+        fname = "output/prob/test_{name}_{date}-{error}_prob.png".format(name=name, date=date, error=error)
         plot_single_prob(myOCD[2], myCalib[0], fname)
