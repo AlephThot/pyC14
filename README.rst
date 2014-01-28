@@ -9,4 +9,7 @@ The project is based on few remarks :
  3. most of the used softawre are blackbox, not always well-documented and most often deprecated
 
 Based on these constations and my strong "good opinion" on "python" I started to develope my own code.
-Part of this code (plotting) is freely inspired from the IOSACal software, and I strongly recommand to have a look at what they do (and encourage them to continu).
+Part of this code (plotting) is freely inspired from 
+the `IOSACal </http://c14.iosa.it/en/latest/#>`_ software, and 
+I strongly recommand to have a look at what they do (and 
+encourage them to continu).
