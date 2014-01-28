@@ -1,0 +1,22 @@
+[
+    {
+        "description": "main parameters to run locally oxcal",
+        "target":"OxCal",
+        "OXCAL_TEMPDIR": "/tmp",
+        "OXCAL_FILE_BASENAME": "calib",
+        "OXCAL_BIN_LINUX": "/home/clebourlot/Documents/docs-archeo/oxcal-bin/OxCal/bin/OxCalLinux",
+        "oxcal_ext_input": "c14",
+        "oxcal_ext_output_js": "js",
+        "oxcal_ext_output_log": "log"
+    },
+    {
+        "description": "OxCal data structure",
+        "target":"OxCaljs",
+        "ocd_str_param": ["ref", "name", "op", "param", "type"],
+        "ocd_int_param": ["level", "date", "error", "calib"],
+        "lh_int_param": ["resolution"],
+        "lh_flt_param": ["median", "mean", "sigma", "probNorm", "start"],
+        "lh_csv_param": ["prob"]
+    }
+]
+
