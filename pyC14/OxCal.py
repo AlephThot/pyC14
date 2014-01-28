@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
- 
+
 """
 
     Part of the pyC14 scripts set, used to calibrate C14 data.
@@ -11,6 +11,19 @@
     Copyright © 2014 INSA Lyon - MATEIS
 
     This file is part of pyC14.
+
+    pyC14 is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyC14 is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with pyC14.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 
@@ -53,30 +66,29 @@ def calibrate_single(date,
     else:
         in_f.write("R_Date({date},{error});".format(date=date, error=error))
     in_f.close()
-    
+
     system("{oxcal_bin} {input_calib}".format(oxcal_bin=OXCAL_BIN_LINUX, input_calib=oxcal_input_calib))
-    
+
     out_f = open(oxcal_output_log, "r")
     out_st = ""
     for line in out_f:
         out_st = out_st + line
     out_f.close()
-    
+
     if(verbose):
         print(out_st)
-    
-    
+
+
     return (oxcal_output_log, oxcal_output_js)
-    
+
 def parse_OxCal_data(oxcal_js_file):
     myOCD = {}
     myCalib = {}
-    
+
     # Ouverture d'un fichier en *lecture*:
     fichier = open(oxcal_js_file, "r")
 
     for ligne in fichier:
-    # ...
         modele = Word( alphas ) + "[" + Word(nums) + "]" + Word( printables )
         try:
             parsed_data = modele.parseString( ligne )
@@ -101,5 +113,5 @@ def parse_OxCal_data(oxcal_js_file):
         myOCD[ocd].set_axis()
     for c in myCalib:
         myCalib[c].set_axis()
-        
+
     return (myOCD, myCalib)

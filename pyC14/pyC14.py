@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
- 
+
 """
 
     Part of the pyC14 scripts set, used to calibrate C14 data.
@@ -11,6 +11,19 @@
     Copyright © 2014 INSA Lyon - MATEIS
 
     This file is part of pyC14.
+
+    pyC14 is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyC14 is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with pyC14.  If not, see <http://www.gnu.org/licenses/>.
 
 """
 
@@ -48,13 +61,13 @@ class Likelihood():
         self.range = []
         self.prob = np.zeros(0)
         self.calibAxis = np.zeros(0)
-        
+
     def __repr__(self):
         if(len(self.comment)>0):
             return self.comment[0]
         else:
             return ""
-            
+
     def __str__(self):
         print(self.__dict__.keys())
         toto = ""
@@ -112,7 +125,7 @@ class Likelihood():
                     out = out + "{arg}  {value}\n".format(arg=arg,value="["+str(tt[b][0])+":"+str(tt[b][1])+"] "+str(tt[b][2])+"% ")
             out = out + "{arg}\n".format(arg=arg)
         return out
-    
+
     def get_data(self,
                  arg="#"):
         out = ""
@@ -125,7 +138,7 @@ class Likelihood():
             self.calibAxis = np.zeros(len(self.prob))
             for i in range(len(self.prob)):
                 self.calibAxis[i] = self.start+i*self.resolution
-          
+
 
 class OxCalData():
     """
@@ -135,7 +148,7 @@ class OxCalData():
                  id):
         self.id = id
         self.likelihood = Likelihood()
-        
+
     def __repr__(self):
         if(hasattr(self,"name")):
             if(hasattr(self,"date") and hasattr(self,"error")):
@@ -144,7 +157,7 @@ class OxCalData():
                 return self.name
         else:
             return "{}".format(self.id)
-        
+
     def __str__(self):
         print(self.__dict__)
         print(self.likelihood)
@@ -155,7 +168,7 @@ class OxCalData():
                 return self.name
         else:
             return "{}".format(self.id)
-        
+
     def set_param(self,line):
         # define grammar
         a = line.find("]")
@@ -215,21 +228,20 @@ class Calibration():
         self.id = id
         self.bp = np.zeros(0)
         self.calibAxis = np.zeros(0)
-        
+
     def __repr__(self):
         if("ref" in self.__dict__.keys()):
             return self.ref
         else:
             return "{}".format(self.id)
-        
+
     def __str__(self):
         print(self.__dict__.keys())
         if("ref" in self.__dict__.keys()):
             return self.ref
         else:
             return "{}".format(self.id)
-        
-    
+
     def set_param(self,line):
         # define grammar
         a = line.find("]")
@@ -264,12 +276,10 @@ class Calibration():
             self.calibAxis = np.zeros(len(self.bp))
             for i in range(len(self.bp)):
                 self.calibAxis[i] = self.start+i*self.resolution
-            
+
     def get_meta(self,
                  arg="#"):
         out = ""
         if("ref" in self.__dict__.keys()):
             out = out + "{arg} {value}\n".format(arg=arg,value=self.ref)
         return out
-        
-        

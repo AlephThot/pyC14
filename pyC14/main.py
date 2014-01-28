@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
- 
+
 """
 
     Part of the pyC14 scripts set, used to calibrate C14 data.
@@ -12,11 +12,24 @@
 
     This file is part of pyC14.
 
+    pyC14 is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    pyC14 is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with pyC14.  If not, see <http://www.gnu.org/licenses/>.
+
 
 
 
     :Example:
- 
+
     >>> Radiocarbon().calibrate_single(4713, 54) # doctest: +NORMALIZE_WHITESPACE
     OxCal v4.2.3 Bronk Ramsey (2013); r:5
      IntCal13 atmospheric curve (Reimer et al 2013)
@@ -59,7 +72,7 @@ class Radiocarbon():
         """
             Initialise the paramter variables, load the parameter
             file and deals with it.
-            
+
             :param param_file: the path to the parameters file
             :param verbose: if True, explicite the output
             :type params: string
@@ -78,7 +91,7 @@ class Radiocarbon():
                    ):
         """
             Load the parameter file in the json format.
-            
+
             :param param_file: the path to the parameters file
             :param verbose: if True, explicite the output
             :type params: string
@@ -88,7 +101,7 @@ class Radiocarbon():
         """
         if(param_file == None):
             param_file = self.param_file
-            
+
         if(os.path.exists(self.param_file)):
             f = open(self.param_file,"r")
             new_params = json.load(f)
@@ -106,7 +119,7 @@ class Radiocarbon():
         """
             It analyses the dictionnary of parameters and makes them
             availlable for all the options.
-            
+
             :param params: the set of dictionnay of parameters
             :param verbose: if True, explicite the output
             :type params: [dict]
@@ -145,7 +158,7 @@ class Radiocarbon():
                          verbose = True):
         """
             Use OxCal to calibrate a single radiocarbon date.
-            
+
             :param date: the c14 date to calibrate
             :param error: the systemic error
             :type date: int
@@ -157,32 +170,32 @@ class Radiocarbon():
         imput_oxcal_file = self._create_oxcal_file(self.param_oxcal["oxcal_ext_input"])
         output_oxcal_log = self._create_oxcal_file(self.param_oxcal["oxcal_ext_output_log"])
         output_oxcal_js = self._create_oxcal_file(self.param_oxcal["oxcal_ext_output_js"])
-        
+
         in_f = open(imput_oxcal_file, "w")
         if(name != ""):
             in_f.write("R_Date(\"{name}\",{date},{error});".format(name=name,date=date, error=error))
         else:
             in_f.write("R_Date({date},{error});".format(date=date, error=error))
         in_f.close()
-        
+
         system("{oxcal_bin} {input_calib}".format(
             oxcal_bin = self.param_oxcal["OXCAL_BIN_LINUX"], 
             input_calib = imput_oxcal_file)
         )
-        
+
         out_f = open(output_oxcal_log, "r")
         out_st = ""
         for line in out_f:
             out_st = out_st + line
         out_f.close()
-    
+
         if(verbose):
             print(out_st)
-    
-    
+
+
         return (output_oxcal_log, output_oxcal_js)
 
-    
+
     def _create_oxcal_file(self,
                           ext,
                           basename = None,
@@ -190,7 +203,7 @@ class Radiocarbon():
                           ):
         """
             Internal function to create a standard OxCal file-name
-            
+
             :param ext: the expected file extension
             :param basename: base-name of the file
             :param tempdir: path of the temp directory
@@ -199,14 +212,14 @@ class Radiocarbon():
             :type tempdir: string
             :return: the full path of the expected file
             :rtype: string
-            
+
         """
-        
+
         if(basename == None and self.param_oxcal.has_key("OXCAL_FILE_BASENAME")):
             basename = self.param_oxcal["OXCAL_FILE_BASENAME"]
         if(tempdir == None and self.param_oxcal.has_key("OXCAL_TEMPDIR")):
             tempdir = self.param_oxcal["OXCAL_TEMPDIR"]
-            
+
         return "{tempdir}/{basename}.{ext}".format(
             tempdir = tempdir, 
             basename = basename, 
@@ -215,7 +228,6 @@ class Radiocarbon():
 
 
 
-# test de la fonction table
 if __name__ == "__main__":
     Radiocarbon().calibrate_single(4713, 54)
 
