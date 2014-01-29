@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
+ur"""
 
     Part of the pyC14 scripts set, used to calibrate C14 data.
 
@@ -19,8 +19,21 @@
 
     :example:
 
-    >>> print(RadiocarbonSample(4713, 54))
-    RadiocarbonSample( 4713 ± 54 )
+    >>> print(RadiocarbonSample(4713, 54)) # doctest: +NORMALIZE_WHITESPACE
+    RadiocarbonSample( 4713 +/- 54 )
+
+    >>> print(RadiocarbonSample(4713, 54).date)
+    4713
+
+    >>> print(RadiocarbonSample(4713, 54).sigma)
+    54
+
+    >>> print(RadiocarbonSample(4713, 54).string)
+    ( 4713 +/- 54 )
+
+    >>> print(RadiocarbonSample.date.__doc__)
+    Radiocarbon date (BP), before calibration.
+
 
 
 
@@ -43,44 +56,54 @@
 
 from __future__ import print_function
 
-
+from util import *
 
 
 class RadiocarbonSample(object):
-    '''A radiocarbon determination.
+    ur'''A radiocarbon determination.
 
-    Exactly the IOSACal definition.
+    Almost exactly the IOSACal definition, IOSACal compatible.
+
+    the ± has been changed for +/- for unicode compatibility
+    in the __str__ method due to the use of python v2.
     '''
 
     def __init__(self, date, sigma):
         self._date  = date
         self._sigma = sigma
 
-    @property
-    def date(self):
-        doc = "Radiocarbon date (BP), before calibration."
+    @Property
+    def date():
+        doc = u"Radiocarbon date (BP), before calibration."
         def fget(self):
             return self._date
-    
-    @property
-    def sigma(self):
-        doc = "Radiocarbon satndard deviation (years)."
+        return locals()
+
+    @Property
+    def sigma():
+        doc = u"Radiocarbon satndard deviation (years)."
         def fget(self):
             return self._sigma
-        
-    @property
-    def string(self):
-        doc = "string representation of the date: (age ± sigma)"
+        return locals()
+
+    @Property
+    def string():
+        doc = u"string representation of the date: (age +/- sigma)"
         def fget(self):
-            return "( {date} ± {sigma} )".format(date=self._date, sigma=self._sigma)
+            return u"( {date} +/- {sigma} )".format(date=self._date, sigma=self._sigma)
+        return locals()
 
     def __str__(self):
-        return "RadiocarbonSample( {date} ± {sigma} )".format(date=self._date, sigma=self._sigma)
+        return u"RadiocarbonSample( {date} +/- {sigma} )".format(date=self._date, sigma=self._sigma)
 
 
 
 if __name__ == "__main__":
     print(RadiocarbonSample(4713, 54))
+    #print(RadiocarbonSample(4713, 54).date)
+    #print(RadiocarbonSample(4713, 54).sigma)
+    #print(RadiocarbonSample(4713, 54).string)
+    #print(RadiocarbonSample.date.__doc__)
 
     import doctest
     doctest.testmod()

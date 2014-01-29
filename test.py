@@ -39,7 +39,7 @@ from pyC14.OxCal import calibrate_single, parse_OxCal_data
 
 
 example_data = [
- ("ex20140129",4305,35)
+ ("ex1",4305,35)
 ]
 
 

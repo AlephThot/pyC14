@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
+ur"""
 
     Part of the pyC14 scripts set, used to calibrate C14 data.
 
@@ -58,8 +58,8 @@ import json
 
 
 
-class Radiocarbon():
-    """
+class Radiocarbon(object):
+    ur"""
     The main class of the pyC14 package. It holds an option
     manager, with th possibility to charge personnal and/or
     local set of options (totally or partially).
@@ -69,7 +69,7 @@ class Radiocarbon():
                param_file = "param_pyC14.json",
                verbose = False
                ):
-        """
+        ur"""
             Initialise the paramter variables, load the parameter
             file and deals with it.
 
@@ -89,7 +89,7 @@ class Radiocarbon():
                    param_file = None,
                    verbose = False
                    ):
-        """
+        ur"""
             Load the parameter file in the json format.
 
             :param param_file: the path to the parameters file
@@ -111,12 +111,12 @@ class Radiocarbon():
             raise NameError("\n\tThe searched param file doesn't exist\n"
                 "\tor the path is not valid.\n"
                 "\t\t-> {}".format(self.param_file))
-                
+
     def param_analyse(self,
                      params,
                      verbose = False
                      ):
-        """
+        ur"""
             It analyses the dictionnary of parameters and makes them
             availlable for all the options.
 
@@ -156,7 +156,7 @@ class Radiocarbon():
                          error,
                          name = "",
                          verbose = True):
-        """
+        ur"""
             Use OxCal to calibrate a single radiocarbon date.
 
             :param date: the c14 date to calibrate
@@ -201,7 +201,7 @@ class Radiocarbon():
                           basename = None,
                           tempdir = None
                           ):
-        """
+        ur"""
             Internal function to create a standard OxCal file-name
 
             :param ext: the expected file extension
@@ -229,7 +229,7 @@ class Radiocarbon():
 
 
 if __name__ == "__main__":
-    Radiocarbon().calibrate_single(4713, 54)
+    #Radiocarbon().calibrate_single(4713, 54)
 
     import doctest
     doctest.testmod()

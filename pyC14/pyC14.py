@@ -55,7 +55,7 @@ def set_str(mot):
 
 
 
-class Likelihood():
+class Likelihood(object):
     def __init__(self):
         self.comment = []
         self.range = []
@@ -101,7 +101,7 @@ class Likelihood():
             modele = "range[" + Word(nums) + "][" + Word(nums) + "]"
             try:
                 rg = modele.parseString( keywords[1] )
-            except ParseException, pe:
+            except ParseException as pe:
                 pass
             else:
                 #print(keywords[1],value)
@@ -140,7 +140,7 @@ class Likelihood():
                 self.calibAxis[i] = self.start+i*self.resolution
 
 
-class OxCalData():
+class OxCalData(object):
     """
     OxCalData defined to store ocd information
     """
@@ -179,7 +179,7 @@ class OxCalData():
             modele = Word( alphas ) + "[" + Word(nums) + "]" + Word(objectPath) + "=" + Word( divers )
             try:
                 pd = modele.parseString( line )
-            except ParseException, pe:
+            except ParseException as pe:
                 pass
             else:
                 obj = pd[0]
@@ -219,7 +219,7 @@ class OxCalData():
     def set_axis(self):
         self.likelihood.set_axis()
 
-class Calibration():
+class Calibration(object):
     """
     Calibration structure, to store the calib curve
     """
@@ -252,7 +252,7 @@ class Calibration():
             modele = Word( alphas ) + "[" + Word(nums) + "]" + Word(objectPath) + "=" + Word( divers )
             try:
                 pd = modele.parseString( line )
-            except ParseException, pe:
+            except ParseException as pe:
                 pass
             else:
                 obj = pd[0]
