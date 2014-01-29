@@ -17,7 +17,10 @@
         in order to be more general.
 
 
+    :example:
 
+    >>> print(RadiocarbonSample(4713, 54))
+    RadiocarbonSample( 4713 ± 54 )
 
 
 
@@ -50,8 +53,34 @@ class RadiocarbonSample(object):
     '''
 
     def __init__(self, date, sigma):
-        self.date  = date
-        self.sigma = sigma
+        self._date  = date
+        self._sigma = sigma
+
+    @property
+    def date(self):
+        doc = "Radiocarbon date (BP), before calibration."
+        def fget(self):
+            return self._date
+    
+    @property
+    def sigma(self):
+        doc = "Radiocarbon satndard deviation (years)."
+        def fget(self):
+            return self._sigma
+        
+    @property
+    def string(self):
+        doc = "string representation of the date: (age ± sigma)"
+        def fget(self):
+            return "( {date} ± {sigma} )".format(date=self._date, sigma=self._sigma)
 
     def __str__(self):
-        return "RadiocarbonSample( %d ± %d )" % (self.date, self.sigma)
+        return "RadiocarbonSample( {date} ± {sigma} )".format(date=self._date, sigma=self._sigma)
+
+
+
+if __name__ == "__main__":
+    print(RadiocarbonSample(4713, 54))
+
+    import doctest
+    doctest.testmod()
