@@ -40,31 +40,31 @@ from pyC14.main import Radiocarbon
 
 
 example_data = [
- ("F.0206",4860,35),
- ("F.0603",4830,35)
+ ("date1",4860,35),
+ ("date2",4830,35)
 ]
 
-#example_oxcal_project = "../../bellevue-c14/bellevue_parFosse.oxcal"
 example_oxcal_project = "example.oxcal"
 
-if __name__ == "__main__":
+def main():
 
     OxCal = Radiocarbon()
 
-    #for (name, date, error) in example_data:
-        ##single calibration
-        #(oxcal_output_log, oxcal_output_js) = OxCal.calibrate_single(date, error, name)
-        ##the .js file is parsed
-        #(myOCD, myCalib_ref) = parse_OxCal_data(oxcal_output_js)
-        ##plot
-        #fname = "output/gd/test_{name}_{date}-{error}_gd_s.png".format(name=name, date=date, error=error)
-        #expend.plot(myOCD[2], myCalib_ref[0], fname)
-        ##plot
-        #fname = "output/ptt/test_{name}_{date}-{error}_ptt_s.png".format(name=name, date=date, error=error)
-        #simple.plot(myOCD[2], myCalib_ref[0], fname)
-        ##plot
-        #fname = "output/prob/test_{name}_{date}-{error}_prob_s.png".format(name=name, date=date, error=error)
-        #probability.plot(myOCD[2], myCalib_ref[0], fname)
+    for (name, date, error) in example_data:
+        #single calibration
+        (oxcal_output_log, oxcal_output_js) = OxCal.calibrate_single(date, error, name)
+        #the .js file is parsed
+        (myOCD, myCalib_ref) = parse_OxCal_data(oxcal_output_js)
+
+        #plot
+        fname = "output/gd/test_{name}_{date}-{error}_gd_s.png".format(name=name, date=date, error=error)
+        expend.plot(myOCD[2], myCalib_ref[0], fname)
+        #plot
+        fname = "output/ptt/test_{name}_{date}-{error}_ptt_s.png".format(name=name, date=date, error=error)
+        simple.plot(myOCD[2], myCalib_ref[0], fname)
+        #plot
+        fname = "output/prob/test_{name}_{date}-{error}_prob_s.png".format(name=name, date=date, error=error)
+        probability.plot(myOCD[2], myCalib_ref[0], fname)
 
     #single calibration
     (oxcal_output_log, oxcal_output_js) = OxCal.calibrate_project(example_oxcal_project, verbose=False)
@@ -77,6 +77,7 @@ if __name__ == "__main__":
 
             fname = "output/gd/test_{name}_{date}-{error}_gd_p.png".format(name=oc.name, date=oc.date, error=oc.error)
             expend.plot(oc, myCalib[oc.calib], fname)
+
             print("plot gd done")
             #plot
             fname = "output/ptt/test_{name}_{date}-{error}_ptt_p.png".format(name=oc.name, date=oc.date, error=oc.error)
@@ -90,6 +91,7 @@ if __name__ == "__main__":
             fname = "output/comp/test_{name}_{date}-{error}_comp_p.png".format(name=oc.name, date=oc.date, error=oc.error)
             compare.plot(oc, myCalib[oc.calib], fname)
             print("plot comp done")
-            
-            #print(oc.likelihood.array)
-            #print(oc.posterior.array)
+
+
+if __name__ == "__main__":
+    main()

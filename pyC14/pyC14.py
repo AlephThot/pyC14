@@ -2,8 +2,6 @@
 
 from __future__ import print_function
 
-__version__ = "$Version: 0.1 $"
-# $Source$
 
 """
 

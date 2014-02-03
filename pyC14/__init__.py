@@ -27,3 +27,6 @@
     along with pyC14.  If not, see <http://www.gnu.org/licenses/>.
 
 """
+
+__version__ = "$Version: 0.1 $"
+# $Source$
