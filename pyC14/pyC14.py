@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
+__version__ = "$Version: 0.1 $"
+# $Source$
+
 """
 
     Part of the pyC14 scripts set, used to calibrate C14 data.
@@ -27,20 +32,19 @@
 
 """
 
-
-from __future__ import print_function
-
 from pyparsing import Word, alphanums, alphas, nums
 from pyparsing import commaSeparatedList, ParseException
 
 import numpy as np
+
+from util import *
 
 
 ocd_str_param = (u"ref", u"name", u"op", u"param", u"type")
 ocd_int_param = (u"level", u"date", u"error", u"calib")
 
 lh_int_param = (u"resolution")
-lh_flt_param = (u"median", u"mean", u"sigma", u"probNorm", u"start")
+lh_flt_param = (u"median", u"mean", u"sigma", u"probNorm", u"start", u"agreement")
 lh_csv_param = (u"prob")
 
 objectPath = alphanums + ".[]-"
@@ -48,8 +52,6 @@ divers = alphanums + ".,%()\"_- [];:"
 
 
 
-def set_str(mot):
-    return mot[1:len(mot)-1]
 
 
 
@@ -61,6 +63,7 @@ class Likelihood(object):
         self.range = []
         self.prob = np.zeros(0)
         self.calibAxis = np.zeros(0)
+        self.used = False
 
     def __repr__(self):
         if(len(self.comment)>0):
@@ -138,7 +141,10 @@ class Likelihood(object):
             self.calibAxis = np.zeros(len(self.prob))
             for i in range(len(self.prob)):
                 self.calibAxis[i] = self.start+i*self.resolution
-
+            self.array = np.array([self.calibAxis,
+                                  self.prob]
+                                ).transpose()
+            self.used = True
 
 class OxCalData(object):
     """
@@ -148,6 +154,7 @@ class OxCalData(object):
                  id):
         self.id = id
         self.likelihood = Likelihood()
+        self.posterior = Likelihood()
 
     def __repr__(self):
         if(hasattr(self,"name")):
@@ -199,6 +206,8 @@ class OxCalData(object):
                         keywords = key.split(".")
                         if(keywords[0]=="likelihood"):
                             self.likelihood.set_param(keywords,value)
+                        elif(keywords[0]=="posterior"):
+                            self.posterior.set_param(keywords,value)
 
     def get_meta(self,
                  arg="#",
@@ -218,6 +227,47 @@ class OxCalData(object):
 
     def set_axis(self):
         self.likelihood.set_axis()
+        self.posterior.set_axis()
+
+    def adjust_comparaison(self,
+                           resolution = 2,
+                           verbose = False):
+        d0_l = self.likelihood.array[0,0]
+        d0_p = self.posterior.array[0,0]
+        dn_l = self.likelihood.array[-1,0]
+        dn_p = self.posterior.array[-1,0]
+        dbt = (d0_p - d0_l)/resolution
+        fin = (dn_p - dn_l)/resolution
+        #print(d0_l, dn_l, "-", d0_p, dn_p)
+        #print(dbt, fin)
+
+        a = len(self.likelihood.array[:,0])
+        b = len(self.posterior.array[:,0])
+        #print(a,b)
+        tr_date_l = self.likelihood.array[max(0,dbt):a+min(0,fin),0]
+        trunck_l = self.likelihood.array[max(0,dbt):a+min(0,fin),1]
+        tr_date_p = self.posterior.array[-min(0,dbt):b-max(0,fin),0]
+        trunck_p = self.posterior.array[-min(0,dbt):b-max(0,fin),1]
+
+        #print(len(trunck_l), len(trunck_p))
+        if(tr_date_l[0] != tr_date_p[0]):
+            print("Warning!!! not same start date")
+            print(tr_date_l[0], " vs ", tr_date_p[0])
+        if(tr_date_l[-1] != tr_date_p[-1]):
+            print("Warning!!! not same end date")
+            print(tr_date_l[-1], " vs ", tr_date_p[-1])
+
+        out = 0
+        for i in range(len(trunck_l)):
+            if(trunck_l[i]>0.1 and trunck_p[i]>0.1):
+                out = max(out, (trunck_p[i]/trunck_l[i]))
+
+        if(verbose):
+            print("alpha = ", out)
+        #print("agreement = ", self.posterior.agreement)
+        return out
+
+
 
 class Calibration(object):
     """
@@ -276,6 +326,10 @@ class Calibration(object):
             self.calibAxis = np.zeros(len(self.bp))
             for i in range(len(self.bp)):
                 self.calibAxis[i] = self.start+i*self.resolution
+            self.array = np.array([self.calibAxis,
+                                  self.bp,
+                                  self.sigma]
+                                ).transpose()
 
     def get_meta(self,
                  arg="#"):

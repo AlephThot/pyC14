@@ -29,7 +29,7 @@
 
 from __future__ import print_function
 
-from os import system
+from os import system, path
 
 from pyparsing import *
 from pyparsing import Word, WordStart,WordEnd
@@ -43,10 +43,12 @@ OXCAL_FILE_BASENAME = u"calib"
 def create_oxcal_file(ext,
                      basename = OXCAL_FILE_BASENAME,
                      tempdir = OXCAL_TEMPDIR):
-    return u"{tempdir}/{basename}.{ext}".format(
-        tempdir = tempdir, 
-        basename = basename, 
-        ext = ext)
+    return path.join(tempdir, 
+                     "{basename}.{ext}".format(basename = basename, ext = ext))
+    #return u"{tempdir}/{basename}.{ext}".format(
+        #tempdir = tempdir, 
+        #basename = basename, 
+        #ext = ext)
 
 oxcal_input_calib = create_oxcal_file(u"c14")
 oxcal_output_js = create_oxcal_file(u"js")
@@ -54,7 +56,9 @@ oxcal_output_log = create_oxcal_file(u"log")
 
 OXCAL_BIN_LINUX = u"/home/clebourlot/Documents/docs-archeo/oxcal-bin/OxCal/bin/OxCalLinux"
 
-
+#def clibrate_project(project_file,
+                     #verbose = True):
+    
 
 def calibrate_single(date,
                      error,
@@ -67,7 +71,10 @@ def calibrate_single(date,
         in_f.write(u"R_Date({date},{error});".format(date=date, error=error))
     in_f.close()
 
-    system(u"{oxcal_bin} {input_calib}".format(oxcal_bin=OXCAL_BIN_LINUX, input_calib=oxcal_input_calib))
+    system(u"{oxcal_bin} {oxcal_opt} {input_calib}".format(
+        oxcal_bin=OXCAL_BIN_LINUX, 
+        oxcal_opt = "-i1",
+        input_calib=oxcal_input_calib))
 
     out_f = open(oxcal_output_log, 'r')
     out_st = u""

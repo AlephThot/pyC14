@@ -1,0 +1,5 @@
+ Sequence("Example pyC14")
+ {
+  R_Date("F.0603",4830,35);
+  R_Date("F.0206",4860,35)
+ };

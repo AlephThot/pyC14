@@ -85,6 +85,10 @@ class Radiocarbon(object):
         self.param_oxcal_data = {}
         self.param_load(verbose = verbose)
 
+        self.imput_oxcal_file = self._create_oxcal_file(self.param_oxcal["oxcal_ext_input"])
+        self.output_oxcal_log = self._create_oxcal_file(self.param_oxcal["oxcal_ext_output_log"])
+        self.output_oxcal_js = self._create_oxcal_file(self.param_oxcal["oxcal_ext_output_js"])
+
     def param_load(self,
                    param_file = None,
                    verbose = False
@@ -183,17 +187,57 @@ class Radiocarbon(object):
             input_calib = imput_oxcal_file)
         )
 
-        out_f = open(output_oxcal_log, "r")
-        out_st = ""
-        for line in out_f:
-            out_st = out_st + line
-        out_f.close()
-
         if(verbose):
+            out_f = open(output_oxcal_log, "r")
+            out_st = ""
+            for line in out_f:
+                out_st = out_st + line
+            out_f.close()
             print(out_st)
 
 
         return (output_oxcal_log, output_oxcal_js)
+
+
+
+    def calibrate_project(self,
+                         project_file_path,
+                         verbose = False):
+        ur"""
+            Use OxCal to calibrate a single radiocarbon date.
+
+            :param project_file_path: path to the OxCal project file
+            :type project_file_path: string
+            :return: a tuple of file names (oxcal.log, oxcal.js)
+            :rtype: tuple(string, string)
+
+        """
+
+        in_f = open(self.imput_oxcal_file, "w")
+        oc_f = open(project_file_path, "r")
+        for line in oc_f:
+            in_f.write(line)
+        in_f.close()
+        oc_f.close()
+
+        system("{oxcal_bin} {oxcal_opt} {input_calib}".format(
+            oxcal_bin = self.param_oxcal["OXCAL_BIN_LINUX"], 
+            oxcal_opt = "-i2",
+            input_calib = self.imput_oxcal_file)
+        )
+
+        if(verbose):
+            out_f = open(self.output_oxcal_log, "r")
+            out_st = ""
+            for line in out_f:
+                out_st = out_st + line
+            out_f.close()
+            print(out_st)
+
+
+        return (self.output_oxcal_log, self.output_oxcal_js)
+
+
 
 
     def _create_oxcal_file(self,
