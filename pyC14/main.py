@@ -54,6 +54,7 @@ from __future__ import print_function
 import os.path
 from os import system
 import json
+import pkg_resources
 
 
 
@@ -80,19 +81,19 @@ class Radiocarbon(object):
             :return: nothing
             :rtype: None
         """
-        self.param_file = param_file
+
+        self.param_file = pkg_resources.resource_filename("pyC14", "param/%s" % param_file)
         self.param_oxcal = {}
         self.param_oxcal_data = {}
-        self.param_load(verbose = verbose)
+        self.param_load_fromFile(param_file, verbose = verbose)
 
         self.imput_oxcal_file = self._create_oxcal_file(self.param_oxcal["oxcal_ext_input"])
         self.output_oxcal_log = self._create_oxcal_file(self.param_oxcal["oxcal_ext_output_log"])
         self.output_oxcal_js = self._create_oxcal_file(self.param_oxcal["oxcal_ext_output_js"])
 
-    def param_load(self,
-                   param_file = None,
-                   verbose = False
-                   ):
+    def param_load_fromFile(self,
+                            param_file,
+                            verbose = False):
         ur"""
             Load the parameter file in the json format.
 

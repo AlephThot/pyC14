@@ -23,7 +23,7 @@ setup(name='pyC14',
       url='https://github.com/AlephThot/pyC14',
       license='GNU GPLv3',
       packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
-      package_data={'pyC14': ['data/*.14c']},
+      package_data={'pyC14': ['data/*.14c','param/*.json']},
       include_package_data=True,
       zip_safe=False,
       #install_requires=[
