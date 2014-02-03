@@ -11,3 +11,5 @@ include
 lib
 local
 pyC14.egg-info
+
+pyC14/plot/graph/

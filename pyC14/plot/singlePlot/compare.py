@@ -55,8 +55,8 @@ def plot(ocd,
          interpolation = False):
     fig = plt.figure(figsize=(12,6))
     ax1 = plt.subplot(111)
-    plt.xlabel("{} - Calibrated date (BC)".format(ocd.name), fontsize=15)
-    plt.ylabel("Radiocarbon determination (BP)", fontsize=15)
+    plt.xlabel("{} - Calibrated date (BC)".format(ocd.name), fontsize=18)
+    plt.ylabel("Radiocarbon determination (BP)", fontsize=18)
 
 
     plt.text(0., 0.99,"pyC14 v0.1; Xtof; Bellevue 2008-2012",

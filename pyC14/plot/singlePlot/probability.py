@@ -44,8 +44,9 @@ from ...pyC14 import OxCalData, Calibration
 
 
 def plot(ocd,
-                calib,
-                file_name = "test.jpg"):
+         calib,
+         file_name = "test.jpg"):
+
     fig = plt.figure(figsize=(10,2))
     ax2 = plt.subplot(111)
     plt.ylabel("Probability")
